@@ -1,40 +1,76 @@
+def matrix_print(matrix):
+    for line in matrix:
+        print(line)
+
+
+def refactor(field):
+    matrix = [[] for i in range(len(field))]
+    for i in range(len(field)):
+        for j in range(len(field[i])):
+            matrix[i].append(field[i][j].char())
+    return matrix
+
+
 class Field:
     def __init__(self, x, y):
-        self.field = [[Empty for i in range(x)] for i in range(y)]
+        self.field = [[Cell() for i in range(x)] for i in range(y)]
 
     def get_field(self):
         return self.field
 
     def create_cell(self, x, y):
-        self.field[y][x] = Cell()
+        self.field[y][x].revive()
 
-    def near(self, x, y):
+    def near(self, field, x, y):
         counter = 0
         for ypos in range(y - 1, y + 2):
             for xpos in range(x - 1, x + 2):
                 try:
-                    # print(self.field[ypos][xpos].char(), xpos+1, ypos+1)
-                    if self.field[ypos][xpos].char() == 'R':
+                    if field[ypos][xpos] == 'X':
                         counter += 1
                 except:
-                    pass
-        return counter - 1
+                    continue
+        if counter == 3:
+            print(x, y)
+        if field[y][x] == 'X':
+            return counter - 1
+        return counter
+
+    def logic(self):
+        f = list(refactor(self.get_field()))
+        for y in range(len(self.get_field())):
+            for x in range(len(self.get_field()[y])):
+                # print(self.get_field()[y][x].char(), ', x -', x, ', y -', y, self.near(f, x, y))
+                if f[y][x] == "O" and self.near(f, x, y) == 3:
+                    print('revived')
+                    self.get_field()[y][x].revive()
+
+                if f[y][x] == "X" and self.near(f, x, y) <= 1:
+                    self.get_field()[y][x].kill()
+
+                if f[y][x] == "X" and self.near(f, x, y) >= 4:
+                    self.get_field()[y][x].kill()
+            # print('previous')
+            # matrix_print(f)
+            # print('now')
+            # matrix_print(refactor(self.get_field()))
+        return
 
 
 class Cell:
     def __init__(self):
-        self.alive = True
+        self.alive = False
 
     def is_alive(self):
         return self.alive
 
     def char(self):
         if self.is_alive():
-            return "R"
-        return "X"
+            return "X"
+        return "O"
 
+    def kill(self):
+        self.alive = False
 
-class Empty:
-    @staticmethod
-    def char():
-        return 'O'
+    def revive(self):
+        self.alive = True

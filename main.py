@@ -14,11 +14,20 @@ def refactor(field):
     return matrix
 
 
-def logic(x, y, matrix):
-    pass
+inp = ''
 field = solution.Field(10, 10)
-# field.create_cell(5, 7)
-# field.create_cell(5, 8)
-# field.create_cell(6, 7)
-# print(field.near(5, 9))
-# matrix_print(refactor(field.get_field()))
+
+while True:
+    field.logic()
+    inp = input('Write command: ')
+
+    if inp == 'add':
+        q = int(input('How much cells do u want do add?: '))
+        for i in range(q):
+            x = int(input("Enter the x coord: "))-1
+            y = int(input("Enter the y coord: "))-1
+            field.create_cell(x, y)
+    if inp == 'exit':
+        break
+
+    matrix_print(refactor(field.get_field()))
