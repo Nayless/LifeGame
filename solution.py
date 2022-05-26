@@ -26,13 +26,12 @@ class Field:
         for ypos in range(y - 1, y + 2):
             for xpos in range(x - 1, x + 2):
                 try:
-                    if field[ypos][xpos] == 'X':
+                    if field[ypos][xpos] == 1:
                         counter += 1
                 except:
                     continue
-        if counter == 3:
-            print(x, y)
-        if field[y][x] == 'X':
+
+        if field[y][x] == 1:
             return counter - 1
         return counter
 
@@ -41,14 +40,14 @@ class Field:
         for y in range(len(self.get_field())):
             for x in range(len(self.get_field()[y])):
                 # print(self.get_field()[y][x].char(), ', x -', x, ', y -', y, self.near(f, x, y))
-                if f[y][x] == "O" and self.near(f, x, y) == 3:
-                    print('revived')
+                if f[y][x] == 0 and self.near(f, x, y) == 3:
+                    # print('revived')
                     self.get_field()[y][x].revive()
 
-                if f[y][x] == "X" and self.near(f, x, y) <= 1:
+                if f[y][x] == 1 and self.near(f, x, y) <= 1:
                     self.get_field()[y][x].kill()
 
-                if f[y][x] == "X" and self.near(f, x, y) >= 4:
+                if f[y][x] == 1 and self.near(f, x, y) >= 4:
                     self.get_field()[y][x].kill()
             # print('previous')
             # matrix_print(f)
@@ -66,8 +65,8 @@ class Cell:
 
     def char(self):
         if self.is_alive():
-            return "X"
-        return "O"
+            return 1
+        return 0
 
     def kill(self):
         self.alive = False
