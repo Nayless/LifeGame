@@ -2,49 +2,23 @@ import solution
 import pygame as p
 from pygame.locals import *
 
-matrix_print = solution.matrix_print
-
-
 refactor = solution.refactor
 
-
-# inp = ''
-
-
-# while True:
-#     field.logic()
-#     inp = input('Write command: ')
-#
-#     if inp == 'add':
-#         q = int(input('How much cells do u want do add?: '))
-#         for i in range(q):
-#             x = int(input("Enter the x coord: "))-1
-#             y = int(input("Enter the y coord: "))-1
-#             field.create_cell(x, y)
-#     if inp == 'exit':
-#         break
-#
-#     matrix_print(refactor(field.get_field()))
-
-
-# Импорты
-
-
+SIZE = (500,500)
 # Константы цветов RGB
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 # Создаем окно
-root = p.display.set_mode((1000, 500))
+root = p.display.set_mode(SIZE)
 field = solution.Field(root.get_width() // 20, root.get_height() // 20)
 
 
-field.create_cell(3, 3)
-field.create_cell(4, 4)
-field.create_cell(4, 5)
-field.create_cell(3, 5)
-field.create_cell(2, 5)
+
 # Основной цикл
-while 1:
+
+
+started = False
+while True:
     # Заполняем экран белым цветом
     root.fill(WHITE)
 
@@ -63,5 +37,17 @@ while 1:
         for j in range(0 , len(refactor(field.get_field())[i])):
             # print(refactor(field.get_field())[i][j],i,j)
             p.draw.rect(root, (255 * refactor(field.get_field())[i][j] % 256, 0, 0), [i * 20, j * 20, 20, 20])
+    if not started:
+        for i in p.event.get():
+            if i.type == p.KEYDOWN:
+                if i.key == p.K_i:
+                    started = True
+            pressed = p.mouse.get_pressed()
+            pos = p.mouse.get_pos()
+            if pressed[0]:
+                field.create_cell(pos[1] // (SIZE[1] // len(field.get_field()[0])),
+                                  pos[0] // (SIZE[0] // len(field.get_field())))
+
     p.display.update()
-    field.logic()
+    if started:
+        field.logic()
