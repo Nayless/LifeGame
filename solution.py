@@ -21,7 +21,8 @@ class Field:
     def create_cell(self, x, y):
         self.field[y][x].revive()
 
-    def near(self, field, x, y):
+    @staticmethod
+    def near(field, x, y):
         counter = 0
         for ypos in range(y - 1, y + 2):
             for xpos in range(x - 1, x + 2):
@@ -37,11 +38,11 @@ class Field:
 
     def logic(self):
         f = list(refactor(self.get_field()))
+
         for y in range(len(self.get_field())):
             for x in range(len(self.get_field()[y])):
-                # print(self.get_field()[y][x].char(), ', x -', x, ', y -', y, self.near(f, x, y))
+
                 if f[y][x] == 0 and self.near(f, x, y) == 3:
-                    # print('revived')
                     self.get_field()[y][x].revive()
 
                 if f[y][x] == 1 and self.near(f, x, y) <= 1:
@@ -49,10 +50,6 @@ class Field:
 
                 if f[y][x] == 1 and self.near(f, x, y) >= 4:
                     self.get_field()[y][x].kill()
-            # print('previous')
-            # matrix_print(f)
-            # print('now')
-            # matrix_print(refactor(self.get_field()))
         return
 
 
